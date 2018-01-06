@@ -8,7 +8,7 @@ const transformedUsers = users.reduce((results, { user_id, user_email, user_pass
   let role = null;
 
   if (meta_key === 'wp_9thne3_capabilities' && !meta_value.includes('cx_op')) {
-    role = meta_value.match(/"(.+)"/g)[0].replace(/"/, '');
+    role = meta_value.match(/"(.+)"/g)[0].replace(/"/g, '');
   }
 
   return {

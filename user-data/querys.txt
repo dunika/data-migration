@@ -1,0 +1,62 @@
+Get user data
+
+SELECT
+  user.ID AS user_id, user.user_pass, user.user_email,
+  meta.meta_key, meta.meta_value
+FROM
+  beseen_jalert.wp_9thne3_users user
+LEFT JOIN
+  beseen_jalert.wp_9thne3_usermeta meta ON user.ID = meta.user_id
+WHERE meta.meta_key IN( 
+  'first_name',
+  'last_name',
+  'description',
+  '_company_logo',
+  '_company_name',
+  '_company_website',
+  '_company_tagline',
+  '_company_twitter',
+  'billing_first_name',
+  'billing_last_name',
+  'billing_company',
+  'billing_email',
+  'billing_phone',
+  'billing_country',
+  'billing_address_1',
+  'billing_address_2',
+  'billing_city',
+  'billing_state',
+  'billing_postcode',
+  'paying_customer',
+  '_application',
+  'googleplus',
+  'twitter',
+  'facebook',
+  'Linkedin',
+  'wp_9thne3_capabilities'
+);
+
+User roles 
+meta_key 
+'wp_9thne3_capabilities',
+
+values
+'a:1:{s:13:\"administrator\";b:1;}'
+'a:1:{s:8:\"employer\";b:1;}'
+'a:1:{s:9:\"candidate\";b:1;}'
+'a:1:{s:5:\"cx_op\";b:1;}'
+'a:1:{s:8:\"customer\";b:1;}'
+
+Get jobs with application data
+
+SELECT 
+	job.post_date, job.post_content, job.ID, job.post_author, job.post_title, job.post_name,
+    application.post_content, application.ID, application.post_author, application.post_type,
+    meta.meta_id, meta.post_id, meta.meta_value
+FROM
+ beseen_jalert.wp_9thne3_posts job 
+  INNER JOIN 
+ beseen_jalert.wp_9thne3_posts application ON job.ID = application.post_parent
+  JOIN
+ beseen_jalert.wp_9thne3_postmeta meta ON application.ID = meta.post_id
+ WHERE job.post_type="job_listing" && application.post_type="job_application";
