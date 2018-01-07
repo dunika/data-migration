@@ -143,8 +143,8 @@ const transformUserData = (userData, applicationData) => {
         cv,
         ...!isRole && !isBilling && { [metaKey]: meta_value },
         roles: [
-          ...results[user_id] && results[user_id].roles,
-          ...role && [role]
+          ...results[user_id] ? results[user_id].roles : [],
+          ...role ? [role] : []
         ]
       }
     }

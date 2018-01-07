@@ -34,8 +34,8 @@ const main = async () => {
     const transformedJobData = transformJobsData(jobData, transformedApplicationData, transformedJobTypeData, transformedJobCategoryData)
 
     console.log('Writing data');        
-    writeFileSync('users.json', JSON.stringify(transformedUserData, null, 2), 'utf8')
-    writeFileSync('jobs.json', JSON.stringify(transformedJobData, null, 2), 'utf8')
+    writeFileSync('../data/users.json', JSON.stringify(transformedUserData, null, 2), 'utf8')
+    writeFileSync('../data/jobs.json', JSON.stringify(transformedJobData, null, 2), 'utf8')
     
     console.log('Finished');
     return
