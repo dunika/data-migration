@@ -1,4 +1,5 @@
 const { writeFileSync } = require('fs')
+const { resolve } = require('path')
 
 const mysql = require('promise-mysql');
 
@@ -34,8 +35,8 @@ const main = async () => {
     const transformedJobData = transformJobsData(jobData, transformedApplicationData, transformedJobTypeData, transformedJobCategoryData)
 
     console.log('Writing data');        
-    writeFileSync('../data/users.json', JSON.stringify(transformedUserData, null, 2), 'utf8')
-    writeFileSync('../data/jobs.json', JSON.stringify(transformedJobData, null, 2), 'utf8')
+    writeFileSync(resolve(__dirname, '../data/users.json'), JSON.stringify(transformedUserData, null, 2), 'utf8')
+    writeFileSync(resolve(__dirname, '../data/jobs.json'), JSON.stringify(transformedJobData, null, 2), 'utf8')
     
     console.log('Finished');
     return

@@ -94,7 +94,7 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
         title: post_title,
         applications,
         geolocation,
-        type: jobTypeData[job_id],
+        types: jobTypeData[job_id],
         categories: jobCategoryData[job_id],
         ...!isGeolocation && { [metaKey]: meta_value },
       }
@@ -166,5 +166,3 @@ module.exports = {
   transformUserData,
   transformTaxonomyData
 }
-
-// writeFileSync('transformed-job-data.json', JSON.stringify(transformedJobs, null, 2), 'utf8')
