@@ -102,9 +102,9 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
   }, {})
 }
 
-const transformUserData = (useData, applicationData) => {
+const transformUserData = (userData, applicationData) => {
 
-  return useData.reduce((results, {
+  return userData.reduce((results, {
     user_id,
     user_email,
     user_pass,
@@ -112,14 +112,14 @@ const transformUserData = (useData, applicationData) => {
     meta_value
   }) => {
 
-    let role = null;
+    let role = null
     let isRole = meta_key === 'wp_9thne3_capabilities';
     if (isRole && !meta_value.includes('cx_op')) {
       role = meta_value.match(/"(.+)"/g)[0].replace(/"/g, '');
     }
 
     let isBilling = null;
-    let billing = results[job_id] && results[job_id].billing
+    let billing = results[user_id] && results[user_id].billing
     if (meta_key.includes('billing')) {
       isBilling = true;
       billingKey = camelCase(meta_key.replace('billing_', ''))
@@ -127,7 +127,7 @@ const transformUserData = (useData, applicationData) => {
       billing[billingKey] = meta_value
     }
 
-    const cv = (results[job_id] && results[job_id].cv) ||
+    const cv = (results[user_id] && results[user_id].cv) ||
       Object.values(applicationData).find((application) => application.userId == user_id)
 
     const metaKey = metaKeyMappings[meta_key] || meta_key
@@ -141,10 +141,11 @@ const transformUserData = (useData, applicationData) => {
         password: user_pass,
         billing,
         cv,
-        ...!isRole && { [metaKey]: meta_value },
-        roles: {
-          ...role && { [role]: true }
-        }
+        ...!isRole && !isBilling && { [metaKey]: meta_value },
+        roles: [
+          ...results[user_id] && results[user_id].roles,
+          ...role && [role]
+        ]
       }
     }
   }, {})

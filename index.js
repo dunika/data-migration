@@ -27,14 +27,14 @@ const main = async () => {
     const applicationData = await connection.query(queries.getApplicationData)
     
     console.log('Transforming data');   
-    const transformUserData = transformUserData(userData) 
     const transformedApplicationData = transformApplicationData(applicationData)
+    const transformedUserData = transformUserData(userData, transformedApplicationData) 
     const transformedJobTypeData = transformTaxonomyData(jobTypeData)
     const transformedJobCategoryData = transformTaxonomyData(jobCategoryData)
     const transformedJobData = transformJobsData(jobData, transformedApplicationData, transformedJobTypeData, transformedJobCategoryData)
 
     console.log('Writing data');        
-    writeFileSync('user.json', JSON.stringify(transformedUserData, null, 2), 'utf8')
+    writeFileSync('users.json', JSON.stringify(transformedUserData, null, 2), 'utf8')
     writeFileSync('jobs.json', JSON.stringify(transformedJobData, null, 2), 'utf8')
     
     console.log('Finished');
