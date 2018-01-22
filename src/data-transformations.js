@@ -99,7 +99,7 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
         userId: post_author,
         title: post_title,
         applications,
-        geolocation,
+        location,
         types: jobTypeData[job_id],
         categories: jobCategoryData[job_id],
         ...!isLocation && { [metaKey]: meta_value },

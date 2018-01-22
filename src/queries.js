@@ -64,7 +64,7 @@ const getJobData = `
       'geolocation_lat',
       'geolocation_long',
       'geolocation_postcode',
-      'geolocation_state_long',
+      'geolocation_state_long'
     );
 `.replace(/\n/g, '')
 
@@ -117,6 +117,22 @@ const getJobTypeData = `
     beseen_jalert.wp_9thne3_term_relationships relation
   ON tax.term_taxonomy_id = relation.term_taxonomy_id
   WHERE tax.taxonomy = 'job_listing_type';
+`.replace(/\n/g, '')
+
+
+const getJobRegions = `
+  SELECT
+    DISTINCT terms.name
+  FROM 
+    beseen_jalert.wp_9thne3_term_taxonomy tax
+  LEFT JOIN
+    beseen_jalert.wp_9thne3_terms terms 
+  ON 
+    tax.term_id = terms.term_id
+  LEFT JOIN
+    beseen_jalert.wp_9thne3_term_relationships relation
+  ON tax.term_taxonomy_id = relation.term_taxonomy_id
+  WHERE tax.taxonomy = 'job_listing_region';
 `.replace(/\n/g, '')
 
 module.exports = {
