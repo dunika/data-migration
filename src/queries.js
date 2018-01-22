@@ -49,6 +49,7 @@ const getJobData = `
     meta.meta_key IN(
       '_application',
       '_apply_link',
+      '_job_location',
       '_company_name',
       '_company_website',
       '_filled',

@@ -20,6 +20,7 @@ const metaKeyMappings = {
   'geolocation_long': 'lng',
   'geolocation_postcode': 'postcode',
   'geolocation_state_long': 'region',
+  '_job_location': 'formattedAddress',
   // applications 
   '_candidate_user_id': 'userId',
   'Message': 'coverLetter',
@@ -80,7 +81,7 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
     
     let isLocation = null;
     let location = results[job_id] && results[job_id].location 
-    if (meta_key.includes('geolocation')) {
+    if (/geolocation|_job_location/.test(meta_key)) {
       isLocation = true;
       geoKey = metaKeyMappings[meta_key]
       location = location || {}
