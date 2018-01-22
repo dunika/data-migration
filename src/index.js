@@ -1,15 +1,21 @@
 const { writeFileSync } = require('fs')
 const { resolve } = require('path')
+const { values } = require('lodash')
 
 const mysql = require('promise-mysql');
 
 const queries = require('./queries')
+const getKeys = require('./get-keys')
 const {
   transformUserData,
   transformApplicationData,
   transformJobsData,
   transformTaxonomyData
 } = require('./data-transformations')
+
+const writeJsonToFile = (name, json) => {
+  writeFileSync(resolve(__dirname, `../data/${name}.json`), JSON.stringify(json, null, 2), 'utf8')
+}
 
 const main = async () => {
   try {
@@ -32,12 +38,26 @@ const main = async () => {
     const transformedUserData = transformUserData(userData, transformedApplicationData) 
     const transformedJobTypeData = transformTaxonomyData(jobTypeData)
     const transformedJobCategoryData = transformTaxonomyData(jobCategoryData)
-    const transformedJobData = transformJobsData(jobData, transformedApplicationData, transformedJobTypeData, transformedJobCategoryData)
+    const transformedJobData = transformJobsData(
+      jobData,
+      transformedApplicationData,
+      transformedJobTypeData,
+      transformedJobCategoryData
+    )
+
+    const jobs = values(transformedJobData)
+    const users = values(transformedUserData)
+    
+    console.log('Getting keys')
+    const jobKeys = getKeys(jobs)
+    const userKeys = getKeys(users)
 
     console.log('Writing data');        
-    writeFileSync(resolve(__dirname, '../data/users.json'), JSON.stringify(transformedUserData, null, 2), 'utf8')
-    writeFileSync(resolve(__dirname, '../data/jobs.json'), JSON.stringify(transformedJobData, null, 2), 'utf8')
-    
+    writeJsonToFile('users', users)
+    writeJsonToFile('user-keys', userKeys)
+    writeJsonToFile('jobs', jobs)
+    writeJsonToFile('job-keys', jobKeys)
+        
     console.log('Finished');
     return
   } catch (error) {

@@ -54,23 +54,17 @@ const getJobData = `
       '_filled',
       '_hours',
       '_job_expires',
-      '_job_location',
       '_rate_max',
       '_rate_min',
       '_salary_max',
       '_salary_min',
-      'geolocated',
-      'geolocation_city',
       'geolocation_country_long',
-      'geolocation_country_short',
+      'geolocation_country_short'
       'geolocation_formatted_address',
       'geolocation_lat',
       'geolocation_long',
       'geolocation_postcode',
       'geolocation_state_long',
-      'geolocation_state_short',
-      'geolocation_street',
-      'geolocation_street_number'
     );
 `.replace(/\n/g, '')
 

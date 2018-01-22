@@ -9,11 +9,17 @@ const metaKeyMappings = {
   '_filled': 'isFilled',
   '_hours': 'hoursPerWeek',
   '_job_expires': 'expiresAt',
-  '_job_location': 'location',
   '_rate_max': 'hourlyRateMax',
   '_rate_min': 'hourlyRateMin',
   '_salary_max': 'salaryMax',
   '_salary_min':  'salaryMin',
+  'geolocation_country_long': 'country',
+  'geolocation_country_short': 'countryCode',
+  'geolocation_formatted_address': 'formattedAddress',
+  'geolocation_lat': 'lat',
+  'geolocation_long': 'lng',
+  'geolocation_postcode': 'postcode',
+  'geolocation_state_long': 'region',
   // applications 
   '_candidate_user_id': 'userId',
   'Message': 'coverLetter',
@@ -72,13 +78,13 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
     const applications = (results[job_id] && results[job_id].applications) || 
       Object.values(applicationData).filter((application) => application.jobId == job_id)
     
-    let isGeolocation = null;
-    let geolocation = results[job_id] && results[job_id].geolocation 
+    let isLocation = null;
+    let location = results[job_id] && results[job_id].location 
     if (meta_key.includes('geolocation')) {
-      isGeolocation = true;
-      geoKey = camelCase(meta_key.replace('geolocation_', ''))
-      geolocation = geolocation || {}
-      geolocation[geoKey] = meta_value
+      isLocation = true;
+      geoKey = metaKeyMappings[meta_key]
+      location = location || {}
+      location[geoKey] = meta_value
     }
 
     const metaKey = metaKeyMappings[meta_key] || meta_key
@@ -96,7 +102,7 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
         geolocation,
         types: jobTypeData[job_id],
         categories: jobCategoryData[job_id],
-        ...!isGeolocation && { [metaKey]: meta_value },
+        ...!isLocation && { [metaKey]: meta_value },
       }
     }
   }, {})
