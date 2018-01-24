@@ -31,6 +31,7 @@ const main = async () => {
     const jobData = await connection.query(queries.getJobData)
     const jobCategoryData = await connection.query(queries.getJobCategoryData)
     const jobTypeData = await connection.query(queries.getJobTypeData)
+    const jobRegionData = await connection.query(queries.getJobRegionData)    
     const applicationData = await connection.query(queries.getApplicationData)
     
     console.log('Transforming data');   
@@ -38,11 +39,13 @@ const main = async () => {
     const transformedUserData = transformUserData(userData, transformedApplicationData) 
     const transformedJobTypeData = transformTaxonomyData(jobTypeData)
     const transformedJobCategoryData = transformTaxonomyData(jobCategoryData)
+    const transformedJobRegionData = transformTaxonomyData(jobRegionData)        
     const transformedJobData = transformJobsData(
       jobData,
       transformedApplicationData,
       transformedJobTypeData,
-      transformedJobCategoryData
+      transformedJobCategoryData,
+      transformedJobRegionData
     )
 
     const jobs = values(transformedJobData)

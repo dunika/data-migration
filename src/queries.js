@@ -90,7 +90,7 @@ const getApplicationData = `
     );
 `.replace(/\n/g, '')
 
-const getJobCategoryData = `
+const buildTaxonomyQuery = (taxonomyKey) => `
   SELECT
     terms.name, relation.object_id AS job_id
   FROM 
@@ -102,44 +102,20 @@ const getJobCategoryData = `
   LEFT JOIN
     beseen_jalert.wp_9thne3_term_relationships relation
   ON tax.term_taxonomy_id = relation.term_taxonomy_id
-  WHERE tax.taxonomy = 'job_listing_category';
+  WHERE tax.taxonomy = '${taxonomyKey}';
 `.replace(/\n/g, '')
 
-const getJobTypeData = `
-  SELECT
-    terms.name, relation.object_id AS job_id
-  FROM 
-    beseen_jalert.wp_9thne3_term_taxonomy tax
-  LEFT JOIN
-    beseen_jalert.wp_9thne3_terms terms 
-  ON 
-    tax.term_id = terms.term_id
-  LEFT JOIN
-    beseen_jalert.wp_9thne3_term_relationships relation
-  ON tax.term_taxonomy_id = relation.term_taxonomy_id
-  WHERE tax.taxonomy = 'job_listing_type';
-`.replace(/\n/g, '')
+const getJobCategoryData = buildTaxonomyQuery('job_listing_category');
 
+const getJobTypeData = buildTaxonomyQuery('job_listing_type')
 
-const getJobRegions = `
-  SELECT
-    DISTINCT terms.name
-  FROM 
-    beseen_jalert.wp_9thne3_term_taxonomy tax
-  LEFT JOIN
-    beseen_jalert.wp_9thne3_terms terms 
-  ON 
-    tax.term_id = terms.term_id
-  LEFT JOIN
-    beseen_jalert.wp_9thne3_term_relationships relation
-  ON tax.term_taxonomy_id = relation.term_taxonomy_id
-  WHERE tax.taxonomy = 'job_listing_region';
-`.replace(/\n/g, '')
+const getJobRegionData = buildTaxonomyQuery('job_listing_region')
 
 module.exports = {
   getUserData,
   getJobData,
   getApplicationData,
   getJobCategoryData,
-  getJobTypeData
+  getJobTypeData,
+  getJobRegionData
 }

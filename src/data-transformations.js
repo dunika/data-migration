@@ -19,7 +19,7 @@ const metaKeyMappings = {
   'geolocation_lat': 'lat',
   'geolocation_long': 'lng',
   'geolocation_postcode': 'postcode',
-  'geolocation_state_long': 'region',
+  'geolocation_state_long': 'county',
   '_job_location': 'formattedAddress',
   // applications 
   '_candidate_user_id': 'userId',
@@ -66,7 +66,7 @@ const transformApplicationData = (applicationData) => {
   }, {})
 }
 
-const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryData) => {
+const transformJobsData = (jobsData, applicationData, types, categories, regions) => {
   return jobsData.reduce((results, {
     job_id,
     post_date,
@@ -80,14 +80,16 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
       Object.values(applicationData).filter((application) => application.jobId == job_id)
     
     let isLocation = null;
-    let location = results[job_id] && results[job_id].location 
+    let location = (results[job_id] && results[job_id].location) || {}
     if (/geolocation|_job_location/.test(meta_key)) {
       isLocation = true;
       geoKey = metaKeyMappings[meta_key]
-      location = location || {}
+      location = location
       location[geoKey] = meta_value
     }
-
+    
+    location.regions = regions[job_id]
+    
     const metaKey = metaKeyMappings[meta_key] || meta_key
 
     return {
@@ -101,8 +103,8 @@ const transformJobsData = (jobsData, applicationData, jobTypeData, jobCategoryDa
         title: post_title,
         applications,
         location,
-        types: jobTypeData[job_id],
-        categories: jobCategoryData[job_id],
+        types: types[job_id],
+        categories: categories[job_id],
         ...!isLocation && { [metaKey]: meta_value },
       }
     }
