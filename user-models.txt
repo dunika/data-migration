@@ -8,8 +8,9 @@
   lastLogin
   createdAt
   isActive
+  companyId
 
-  ROLES
+  ROLES ?? 
   userId
   role - admin/employer/jobseeker
 
@@ -35,7 +36,3 @@
   postcode
   country
   phone
-
-  USER_COMPANY
-  userId
-  companyId
