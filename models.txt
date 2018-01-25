@@ -1,0 +1,41 @@
+  USER
+  username
+  email
+  password
+  firstName
+  lastName
+  linkedin
+  lastLogin
+  createdAt
+  isActive
+
+  ROLES
+  userId
+  role - admin/employer/jobseeker
+
+  CV
+  userId
+  location
+  isActive
+
+  COMPANY
+  email
+  name 
+  logo 
+  description
+  website 
+  googleplus
+  twitter
+  facebook
+  linkedin
+  addressLine1
+  addressLine2
+  city
+  county
+  postcode
+  country
+  phone
+
+  USER_COMPANY
+  userId
+  companyId
