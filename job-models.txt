@@ -25,6 +25,10 @@ parent - regionId
 CATEGORY
 name - IT, accounting
 
+JOB_CATEGORY
+jobId
+categoryId
+
 TYPE
 name
   Apprenticeship
