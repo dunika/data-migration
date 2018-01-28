@@ -1,15 +1,14 @@
   USER
   companyId
-  username
   email
   password
   firstName
   lastName
   linkedin
+  role - admin/employer/jobseeker
   lastLogin
   createdAt
   isActive
-  role - admin/employer/jobseeker
 
   CV
   userId

@@ -1,7 +1,6 @@
 JOB
 companyId
 regionId
-categoryId
 companyName
 title
 description
