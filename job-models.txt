@@ -1,5 +1,7 @@
 JOB
 companyId
+regionId
+categoryId
 companyName
 title
 description
@@ -17,19 +19,27 @@ isFilled
 createdAt
 expiresAt
 
-REGIONS
+REGION
 name
-displayName
 parent - regionId
 
-JOB_REGIONS
-jobId
-regionId
+CATEGORY
+name - IT, accounting
 
-JOB_META
+TYPE
+name
+  Apprenticeship
+  Internship
+  Volunteer
+  Permanent
+  Temporary
+  Freelance
+  Part Time
+  Full Time
+
+JOB_TYPE
 jobId
-key - type(permanent/apprenticeship etc), contractType(full time/ part time /contract ?), category(IT, accounting)
-value
+typeId
 
 APPLICATIONS
 jobId
@@ -39,3 +49,4 @@ firstName
 lastName
 coverLetter
 cv
+

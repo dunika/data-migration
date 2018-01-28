@@ -1,4 +1,5 @@
   USER
+  companyId
   username
   email
   password
@@ -8,10 +9,6 @@
   lastLogin
   createdAt
   isActive
-  companyId
-
-  ROLES ?? 
-  userId
   role - admin/employer/jobseeker
 
   CV
