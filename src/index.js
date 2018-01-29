@@ -1,6 +1,6 @@
 const { writeFileSync } = require('fs')
 const { resolve } = require('path')
-const { values } = require('lodash')
+const { values, groupBy } = require('lodash')
 
 const mysql = require('promise-mysql');
 
@@ -19,7 +19,7 @@ const writeJsonToFile = (name, json) => {
 }
 
 const addId = (data) => data.map((item, index) => ({ ...item, id: index }))
-const getIdByName = (name) => regions.find((name) => item.name === name).id
+const getIdByName = (data, name) => data.find((name) => item.name === name).id
 
 const getRegions = async (connection) => {
   const regions = await connection.query(taxonomyQueries.getRegions)
@@ -27,10 +27,10 @@ const getRegions = async (connection) => {
 
   const parentRegions = [{
     name: 'Dublin',
-    id: getRegionId('Dublin'),
+    id: getIdByName(regionsWithId, 'Dublin'),
   }, {
     name: 'London',
-    id: getRegionId('London')
+    id: getIdByName(regionsWithId, 'London')
   }]
   
   return regionsWithId.map(({ name, ...rest }) => {
@@ -43,6 +43,19 @@ const getRegions = async (connection) => {
 
     return { name, parent: parentId, ...rest }
   })
+}
+
+const getJobsToRegions = async (connection) => {
+  const regions = await getRegions(connection)
+  const jobsToRegions = await connection.query(taxonomyQueries.getJobsToRegions)
+
+  const jobsToRegionIds = jobsToRegions.map(({ name, ...rest }) => {
+    const regionId = getIdByName(regions, name)
+    return { regionId, ...rest}
+  })
+
+  return groupBy(jobsToRegionIds, 'jobId')
+  
 }
 
 const getCategories = async (connection) => {
@@ -69,6 +82,7 @@ const main = async () => {
     const categories = await getCategories(connection)
     const types = await getTypes(connection)
     
+    const jobsToRegions = await getJobsToRegions(connection)
     // console.log('Getting data');
     // const userData = await connection.query(queries.getUserData)
     // const jobData = await connection.query(queries.getJobData)
