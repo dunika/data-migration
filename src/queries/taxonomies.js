@@ -2,7 +2,7 @@ const buildQuery = (query) => query.replace(/\n/g, '')
 
 const buildJobToTaxonomyQuery = (key) => buildQuery(`
   SELECT
-    terms.name, relation.object_id AS job_id
+    terms.name, relation.object_id AS jobId
   FROM 
     beseen_jalert.wp_9thne3_term_taxonomy tax
   LEFT JOIN
