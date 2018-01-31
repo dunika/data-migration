@@ -1,8 +1,10 @@
-const cachedConnection = null
+const mysql = require('promise-mysql');
+
+let cachedConnection = null
 
 const connect = async () => {
   if (!cachedConnection) {
-    const cachedConnection = await mysql.createConnection({
+    cachedConnection = await mysql.createConnection({
       host: 'localhost',
       user: 'root',
       password: 'chachacha100',
@@ -12,3 +14,5 @@ const connect = async () => {
   
   return cachedConnection
 } 
+
+module.exports = { connect }
