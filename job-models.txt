@@ -6,6 +6,8 @@ title
 description
 lat
 lng
+country
+countryCode
 formattedAddress
 hourlyRateMin
 hourlyRateMax

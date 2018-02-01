@@ -1,4 +1,4 @@
-const buildQuery = (query) => query.replace(/\n/g, '')
+const { buildQuery } = require('../utils')
 
 const buildTaxonomyQuery = (key) => buildQuery(`
   SELECT

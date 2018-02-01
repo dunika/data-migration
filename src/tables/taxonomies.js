@@ -1,15 +1,15 @@
 const { values, groupBy, chain, map } = require('lodash')
 
-const { getIdByName, addId } = require('./utils')
+const { getTaxonomyIdByName, addId } = require('../utils')
 const taxonomyQueries = require('../queries/taxonomies')
 const { connect } = require('../database')
 
 const getParentRegions = (regions) =>  [{
   name: 'Dublin',
-  id: getIdByName(regions, 'Dublin'),
+  id: getTaxonomyIdByName(regions, 'Dublin'),
 }, {
   name: 'London',
-  id: getIdByName(regions, 'London')
+  id: getTaxonomyIdByName(regions, 'London')
 }]
 
 const cache = {}
@@ -36,12 +36,13 @@ const getRegions = async () => {
         
         return { name, parent: parentId, ...rest }
       })
+
     } catch(error) {
       throw new Error(error)
     }
   }
 
-  return Object.assign({}, cache.regions)
+  return cache.regions
 }
 
 const getJobsToRegion = async () => {
@@ -55,7 +56,7 @@ const getJobsToRegion = async () => {
       const jobsToRegions = await connection.query(taxonomyQueries.getJobsToRegions)
       
       const jobsToRegionIds = jobsToRegions.map(({ name, ...rest }) => {
-        const regionId = getIdByName(regions, name)
+        const regionId = getTaxonomyIdByName(regions, name)
         return { regionId, ...rest}
       })
       
@@ -65,7 +66,7 @@ const getJobsToRegion = async () => {
         .groupBy('jobId')
         .mapValues(jobRegions => jobRegions.reduce((jobRegion, { regionId, jobId }) =>  {
           return parentRegions.reduce((value, parent) => {
-            const parentId = getIdByName(regions, parent.name)
+            const parentId = getTaxonomyIdByName(regions, parent.name)
             if (parentId === regionId) {
               return parentId
             }
@@ -108,7 +109,7 @@ const getJobsToCategories = async () => {
       const jobsToCategories = await connection.query(taxonomyQueries.getJobsToCategories)
       
       cache.getJobsToCategories = jobsToCategories.map(({ name, ...rest }) => {
-        const categoryId = getIdByName(categories, name)
+        const categoryId = getTaxonomyIdByName(categories, name)
         return { categoryId, ...rest}
       })
 
@@ -146,7 +147,7 @@ const getJobsToTypes = async () => {
       const jobsToTypes = await connection.query(taxonomyQueries.getJobsToTypes)
       
       cache.getJobsToTypes = jobsToTypes.map(({ name, ...rest }) => {
-        const typeId = getIdByName(types, name)
+        const typeId = getTaxonomyIdByName(types, name)
         return { typeId, ...rest}
       })
 
