@@ -55,4 +55,49 @@ const getJobs = async () => {
   return cache.jobs
 }
 
+const getApplications = async () => {
+
+  if (!cache.applications) {
+    try {
+
+      const connection = await connect()
+      
+      const applications = await connection.query(jobQueries.getApplications)
+      
+      cache.applications = applications.map((results, {
+        application_id,
+        job_id,
+        meta_key,
+        meta_value
+      }) => {
+    
+        let cv = null;
+        let isAttachment = false;
+        if (meta_key.includes('attachment') && meta_key) {
+          isAttachment = true;
+          const match = meta_value.match(/(\/uploads.)[^"]*/g)
+          if (match) {
+            cv = match[0].replace(/\\/g, '');
+          }
+        }
+    
+        const metaKey = keyMappings[meta_key] || meta_key
+    
+        return {
+          id: application_id,
+          jobId: job_id,
+          ...cv && { cv },
+          ...!isAttachment && { [metaKey]: meta_value },
+        }
+      }, {})
+
+    } catch(error) {
+      throw new Error(error)
+    }
+
+    return cache.applications
+  }
+
+}
+
 module.exports = { getJobs }

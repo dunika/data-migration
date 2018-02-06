@@ -11,6 +11,7 @@ const keyMappings = {
   '_rate_min': 'hourlyRateMin',
   '_salary_max': 'salaryMax',
   '_salary_min':  'salaryMin',
+  'geolocation_postcode': 'postcode',
   'geolocation_country_long': 'country',
   'geolocation_country_short': 'countryCode',
   'geolocation_formatted_address': 'formattedAddress',
@@ -20,7 +21,7 @@ const keyMappings = {
   // applications 
   '_candidate_user_id': 'userId',
   'Message': 'coverLetter',
-  'Full name': 'name',
+  'Full name': 'fullName',
   'Email address': 'email',
   // users
   'first_name': 'firstName',

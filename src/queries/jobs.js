@@ -24,6 +24,7 @@ const getJobs = buildQuery(`
       '_rate_min',
       '_salary_max',
       '_salary_min',
+      'geolocation_postcode',
       'geolocation_country_long',
       'geolocation_country_short',
       'geolocation_formatted_address',

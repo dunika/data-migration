@@ -1,11 +1,14 @@
 JOB
 companyId
 regionId
-companyName
 title
 description
 lat
 lng
+street_address_line_1
+street_address_line_2
+city
+postcode
 country
 countryCode
 formattedAddress
@@ -50,8 +53,7 @@ APPLICATIONS
 jobId
 userId
 email
-firstName
-lastName
+fullName
 coverLetter
 cv
 
