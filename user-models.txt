@@ -1,6 +1,7 @@
   USER
   companyId
   email
+  phoneNumber
   password
   firstName
   lastName

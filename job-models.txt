@@ -53,6 +53,7 @@ APPLICATIONS
 jobId
 userId
 email
+phoneNumber
 fullName
 coverLetter
 cv
