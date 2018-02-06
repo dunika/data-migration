@@ -2,8 +2,9 @@ const keyMappings = {
   // jobs
   '_application': 'applicationEmail',
   '_apply_link': 'applicationLink',
-  '_company_name': 'companyName',
+  '_company_name': 'company',
   '_company_website': 'companyWebsite',
+  '_company_tagline': 'companyDescription',
   '_filled': 'isFilled',
   '_hours': 'hoursPerWeek',
   '_job_expires': 'expiresAt',

@@ -64,7 +64,7 @@ const getApplications = async () => {
       
       const applications = await connection.query(jobQueries.getApplications)
       
-      cache.applications = applications.map((results, {
+      cache.applications = applications.map(({
         application_id,
         job_id,
         meta_key,
@@ -100,4 +100,4 @@ const getApplications = async () => {
 
 }
 
-module.exports = { getJobs }
+module.exports = { getJobs, getApplications }
