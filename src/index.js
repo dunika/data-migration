@@ -12,9 +12,12 @@ const writeJsonToFile = (name, json) => {
 const main = async () => {
   try {
 
-    const lad = await getApplications()
+    const lad = await getJobs()
 
-    console.log(getKeys(lad));
+    console.log(lad);
+
+    console.log(getKeys(lad), 2);
+    
 
     // console.log(jobsToRegions);
     // console.log('Getting data');

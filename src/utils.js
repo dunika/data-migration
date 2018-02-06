@@ -1,3 +1,5 @@
+const { connect } = require('./database')
+
 const addId = (data) => data.map((item, index) => ({ ...item, id: index }))
 
 const getTaxonomyIdByName = (data, name) =>  data.find((item) => item.name === name).id
@@ -14,9 +16,37 @@ const getKeys = (data) => data.reduce((results, item) => {
   }
 }, {})
 
+const buildTableCacher = () => {
+  const cache = {}
+  return (key, query, fn) => async () => {
+    let cachedValue = cache[key]
+
+    if (!cachedValue) {
+      try {
+  
+        const connection = await connect()
+
+        const data = await connection.query(query)
+
+        cachedValue = await fn(data)
+
+      } catch(error) {
+        throw new Error(error)
+      }
+      
+      return cachedValue
+    }
+
+  }
+
+}
+
+const tableCacher = buildTableCacher()
+
 module.exports = {
   addId,
   getKeys,
   buildQuery,
-  getTaxonomyIdByName
+  getTaxonomyIdByName,
+  tableCacher,
 }
