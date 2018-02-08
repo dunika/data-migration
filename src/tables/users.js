@@ -1,67 +1,56 @@
 const { values, groupBy, chain, map, merge, camelCase } = require('lodash')
 
 const userQueries = require('../queries/users')
-const { connect } = require('../database')
 const keyMappings = require('./key-mappings')
 const { getApplications } = require('./jobs')
+const { tableCacher } = require('../utils')
 
-const cache = {}
+const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
+  try {      
+    const applications = await getApplications()
 
-const getUsers = async () => {
-
-  if (!cache.users) {
-    try {
-
-      const connection = await connect()
+    const mappedUserd = users.map(({
+      user_id,
+      user_email,
+      user_pass,
+      meta_key,
+      meta_value
+    }) => {
+  
+      let role = null
+      let isRole = meta_key === 'wp_9thne3_capabilities';
+      if (isRole && !meta_value.includes('cx_op')) {
+        role = meta_value.match(/"(.+)"/g)[0].replace(/"/g, '');
+      }
+  
+      const cv = applications.find((application) => application.userId == user_id)
+  
+      const metaKey = meta_key.includes('billing')
+        ? camelCase(meta_key.replace('billing_', ''))
+        : keyMappings[meta_key] || meta_key
       
-      const users = await connection.query(userQueries.getUsers)
-      
-      const applications = await getApplications()
+      return {
+        id: user_id,
+        email: user_email,
+        password: user_pass,
+        cv,
+        ...!isRole && { [metaKey]: meta_value },
+        ...role && {roles: {
+          [role]: true
+        }}
+      }
+    })
 
-      return users.map(({
-        user_id,
-        user_email,
-        user_pass,
-        meta_key,
-        meta_value
-      }) => {
-    
-        let role = null
-        let isRole = meta_key === 'wp_9thne3_capabilities';
-        if (isRole && !meta_value.includes('cx_op')) {
-          role = meta_value.match(/"(.+)"/g)[0].replace(/"/g, '');
-        }
-    
-        const cv = applications.find((application) => application.userId == user_id)
-    
-        const metaKey = meta_key.includes('billing')
-          ? camelCase(meta_key.replace('billing_', ''))
-          : keyMappings[meta_key] || meta_key
-        
-        return {
-          id: user_id,
-          email: user_email,
-          password: user_pass,
-          cv,
-          ...!isRole && { [metaKey]: meta_value },
-          ...role && {roles: {
-            [role]: true
-          }}
-        }
-      })
+    return chain(mappedJobs)
+      .groupBy('id')
+      .values()
+      .map((user) => merge(...user))
+      .value()
 
-      cache.users = chain(mappedJobs)
-        .groupBy('id')
-        .values()
-        .map((job) => merge(...job))
-        .value()
-
-    } catch(error) {
-      throw new Error(error)
-    }
+  } catch(error) {
+    throw new Error(error)
   }
 
-  return cache.users
-}
+})
 
 module.exports = { getUsers }

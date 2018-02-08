@@ -1,8 +1,8 @@
-const { values, groupBy, chain, map, merge } = require('lodash')
+const { chain } = require('lodash')
 
-const { getJobsToRegion } = require('./taxonomies')
 const jobQueries = require('../queries/jobs')
 const keyMappings = require('./key-mappings')
+const { getJobsToRegion } = require('./taxonomies')
 const { tableCacher } = require('../utils')
 
 const getJobs = tableCacher('jobs', jobQueries.getJobs, async (jobs) => {
@@ -33,11 +33,11 @@ const getJobs = tableCacher('jobs', jobQueries.getJobs, async (jobs) => {
     })
     
     return chain(mappedJobs)
-    .groupBy('id')
-    .values()
-    .map((job) => merge(...job))
-    .map((job) => ({ ...job, regionId: jobsToRegion[job.id] }))
-    .value()
+      .groupBy('id')
+      .values()
+      .map((job) => merge(...job))
+      .map((job) => ({ ...job, regionId: jobsToRegion[job.id] }))
+      .value()
     
   } catch(error) {
     throw new Error(error)
