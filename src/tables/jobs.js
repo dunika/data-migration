@@ -73,9 +73,6 @@ const getApplications = tableCacher('applications', jobQueries.getApplications, 
   }).filter(({ userId }) => typeof userId === 'undefined' || userId !== '0')
 })
 
-// 'jobAppliedFor',
-// 'resumeLocation',
-
 const getResumes = tableCacher('resumes', jobQueries.getResumes, (resumes) => {
 
   const mappedResumes = resumes.map(({

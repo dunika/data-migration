@@ -8,15 +8,16 @@ const getCvs = async() => {
 
   const resumes = await getResumes()
 
-  const resumeCvs = resumes.map(({ userId, file }) => ({ jobseekerId: userId, file }))
+  const resumeCvs = resumes.map(({ userId, file, id }) => ({ jobseekerId: userId, file, id }))
 
   const activeMap = {}
 
-  return uniqBy(resumeCvs, 'file').map(({ jobseekerId, file }) => {
+  return uniqBy(resumeCvs, 'file').map(({ jobseekerId, file, ...rest }) => {
     const cv = { 
       jobseekerId,
       file,
-      isActive: activeMap[jobseekerId] ? false: true
+      isActive: activeMap[jobseekerId] ? false: true,
+      ...rest
     }
 
     activeMap[jobseekerId] = true
