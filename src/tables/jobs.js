@@ -1,4 +1,4 @@
-const { chain } = require('lodash')
+const { chain, merge } = require('lodash')
 
 const jobQueries = require('../queries/jobs')
 const keyMappings = require('./key-mappings')
@@ -70,7 +70,36 @@ const getApplications = tableCacher('applications', jobQueries.getApplications, 
       ...cv && { cv },
       ...!isAttachment && { [metaKey]: meta_value },
     }
-  }, {})
+  }).filter(({ userId }) => typeof userId === 'undefined' || userId !== '0')
 })
 
-module.exports = { getJobs, getApplications }
+// 'jobAppliedFor',
+// 'resumeLocation',
+
+const getResumes = tableCacher('resumes', jobQueries.getResumes, (resumes) => {
+
+  const mappedResumes = resumes.map(({
+    resume_id,
+    user_id,
+    meta_key,
+    meta_value
+  }) => {
+
+    const metaKey = keyMappings[meta_key] || meta_key
+
+    return {
+      id: resume_id,
+      userId: user_id,
+      [metaKey]: meta_value
+    }
+  })
+
+  return chain(mappedResumes)
+    .groupBy('id')
+    .values()
+    .map((resume) => merge(...resume))
+    .value()
+
+})
+
+module.exports = { getJobs, getApplications, getResumes }

@@ -11,7 +11,7 @@ const getKeys = (data) => data.reduce((results, item) => {
   return {
     ...results,
     ...entries.reduce((entryResults, [key, value]) => {
-      return { [key]: value }
+      return { ...entryResults, [key]: typeof value }
     }, {})
   }
 }, {})

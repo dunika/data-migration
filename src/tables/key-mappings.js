@@ -28,7 +28,13 @@ const keyMappings = {
   'first_name': 'firstName',
   'last_name': 'lastName',
   '_company_logo': 'companyLogo',
-  '_company_twitter': 'companyTwitter'
+  '_company_twitter': 'companyTwitter',
+  // resumes
+  '_applying_for_job_id':'jobAppliedFor',
+  '_resume_file': 'file',
+  '_candidate_title':'jobTitle',
+  '_candidate location':'location',
+  '_candidate_photo':'image',
 }
 
 

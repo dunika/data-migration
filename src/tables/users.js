@@ -7,9 +7,8 @@ const { tableCacher } = require('../utils')
 
 const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
   try {      
-    const applications = await getApplications()
 
-    const mappedUserd = users.map(({
+    const mappedUser = users.map(({
       user_id,
       user_email,
       user_pass,
@@ -22,9 +21,7 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
       if (isRole && !meta_value.includes('cx_op')) {
         role = meta_value.match(/"(.+)"/g)[0].replace(/"/g, '');
       }
-  
-      const cv = applications.find((application) => application.userId == user_id)
-  
+    
       const metaKey = meta_key.includes('billing')
         ? camelCase(meta_key.replace('billing_', ''))
         : keyMappings[meta_key] || meta_key
@@ -33,7 +30,6 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
         id: user_id,
         email: user_email,
         password: user_pass,
-        cv,
         ...!isRole && { [metaKey]: meta_value },
         ...role && {roles: {
           [role]: true

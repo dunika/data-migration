@@ -1,19 +1,35 @@
-  USER
-  companyId
+  ACCOUNT
   email
-  phoneNumber
   password
-  firstName
-  lastName
-  linkedin
   role - admin/employer/jobseeker
   lastLogin
   createdAt
   isActive
 
-  CV
-  userId
+  EMPLOYER
+  accountId
+  companyId
+  firstName
+  lastName
+  
+  JOBSEEKER
+  accountId
+  firstName
+  lastName
+  email
+  phoneNumber
+  jobTitle
   location
+  image
+  linkedin
+  lat 
+  lng 
+  country
+  formattedAddress
+
+  CV
+  jobseekerId
+  file
   isActive
 
   COMPANY

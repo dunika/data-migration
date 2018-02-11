@@ -55,7 +55,32 @@ const getApplications = buildQuery(`
     );
 `)
 
+const getResumes = buildQuery(`
+  SELECT
+    post.ID as resume_id,
+    post.post_author AS user_id,
+    meta.meta_value,
+    meta.meta_key
+  FROM beseen_jalert.wp_9thne3_posts post
+  JOIN beseen_jalert.wp_9thne3_postmeta meta
+    ON meta.post_id = post.id
+  WHERE post_type = 'resume'
+  AND
+    meta.meta_key IN(
+      '_applying_for_job_id',
+      '_resume_file',
+      '_candidate_title',
+      '_candidate location',
+      '_candidate_photo',
+      'goelocation_lat',
+      'goelocation_long',
+      'goelocation_formatted_address',
+      'geolocation_country_long'
+    );
+`)
+
 module.exports = {
   getJobs,
   getApplications,
+  getResumes,
 }
