@@ -2,7 +2,7 @@ const { buildQuery } = require('../utils')
 
 const getUsers = buildQuery(`
   SELECT
-    user.ID AS user_id, user.user_pass, user.user_email,
+    user.ID AS user_id, user.user_pass, user.user_email, user.user_registered,
     meta.meta_key, meta.meta_value
   FROM
     beseen_jalert.wp_9thne3_users user

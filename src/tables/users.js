@@ -12,6 +12,7 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
       user_id,
       user_email,
       user_pass,
+      user_registered,
       meta_key,
       meta_value
     }) => {
@@ -28,16 +29,15 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
       
       return {
         id: user_id,
+        createdAt: user_registered,
         email: user_email,
         password: user_pass,
         ...!isRole && { [metaKey]: meta_value },
-        ...role && {roles: {
-          [role]: true
-        }}
+        ...role && { role: role }
       }
     })
 
-    return chain(mappedJobs)
+    return chain(mappedUser)
       .groupBy('id')
       .values()
       .map((user) => merge(...user))

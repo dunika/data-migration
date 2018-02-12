@@ -1,10 +1,29 @@
-const { uniqBy } = require('lodash')
+const { uniqBy, pick } = require('lodash')
 
 const { getApplications, getResumes } = require('../tables/jobs')
 const { getUsers } = require('../tables/users')
 const { addId } = require('../utils')
 
-const getCvs = async() => {
+const getAccounts = async () => {
+  const users = await getUsers()
+
+  const now = (new Date()).toISOString()
+
+  return users.map(({ id, email, password, role, lastLogin, createdAt, isActive }) => {
+    return {
+      id,
+      email,
+      password,
+      role: role === 'candidate' ? 'jobseeker' : role,
+      lastLogin: now,
+      createdAt,
+      isActive: true
+    }
+  })
+
+}
+
+const getCvs = async () => {
 
   const resumes = await getResumes()
 
@@ -13,10 +32,10 @@ const getCvs = async() => {
   const activeMap = {}
 
   return uniqBy(resumeCvs, 'file').map(({ jobseekerId, file, ...rest }) => {
-    const cv = { 
+    const cv = {
       jobseekerId,
       file,
-      isActive: activeMap[jobseekerId] ? false: true,
+      isActive: activeMap[jobseekerId] ? false : true,
       ...rest
     }
 
@@ -24,9 +43,10 @@ const getCvs = async() => {
 
     return cv;
   })
-    
+
 }
 
 module.exports = {
-  getCvs
+  getCvs,
+  getAccounts
 }
