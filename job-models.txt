@@ -52,9 +52,9 @@ typeId
 APPLICATIONS
 jobId
 userId
+cvId
 email
-phoneNumber
-fullName
+firstName
+lastName
 coverLetter
-cv
 

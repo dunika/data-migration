@@ -1,5 +1,7 @@
 const { connect } = require('./database')
 
+const now = (new Date()).toISOString()
+
 const addId = (data) => data.map((item, index) => ({ ...item, id: index }))
 
 const getTaxonomyIdByName = (data, name) =>  data.find((item) => item.name === name).id
@@ -49,4 +51,5 @@ module.exports = {
   buildQuery,
   getTaxonomyIdByName,
   tableCacher,
+  now,
 }

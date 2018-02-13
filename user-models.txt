@@ -11,17 +11,16 @@
   companyId
   firstName
   lastName
+  email
   
   JOBSEEKER
   accountId
   firstName
   lastName
   email
-  phoneNumber
   jobTitle
   location
   image
-  linkedin
   lat 
   lng 
   country

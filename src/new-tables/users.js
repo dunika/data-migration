@@ -1,26 +1,57 @@
-const { uniqBy, pick } = require('lodash')
+const { uniqBy, pick, find } = require('lodash')
 
 const { getApplications, getResumes } = require('../tables/jobs')
 const { getUsers } = require('../tables/users')
-const { addId } = require('../utils')
+const { addId, now } = require('../utils')
 
 const getAccounts = async () => {
   const users = await getUsers()
-
-  const now = (new Date()).toISOString()
 
   return users.map(({ id, email, password, role, lastLogin, createdAt, isActive }) => {
     return {
       id,
       email,
       password,
-      role: role === 'candidate' ? 'jobseeker' : role,
+      role: role === 'candidate' ? 'jobSeeker' : role,
       lastLogin: now,
       createdAt,
       isActive: true
     }
   })
 
+}
+
+const getJobSeekers = async () => {
+  const users = await getUsers()
+
+  const resumes = await getResumes()
+
+  return users.filter(({ role }) => role === 'candidate').map(({ id: accountId, firstName, lastName, email, phoneNumber, createdAt }) => {
+    const { 
+      jobTitle,
+      location,
+      image,
+      lat,
+      lng, 
+      country,
+      formattedAddress,
+    } = resumes.find(({ userId }) => userId == accountId) || {}
+
+    return {
+      accountId,
+      email,
+      firstName,
+      lastName,
+      jobTitle,
+      location,
+      image,
+      lat,
+      lng, 
+      country,
+      formattedAddress,
+      createdAt,
+    }
+  })
 }
 
 const getCvs = async () => {
@@ -48,5 +79,6 @@ const getCvs = async () => {
 
 module.exports = {
   getCvs,
-  getAccounts
+  getAccounts,
+  getJobSeekers,
 }
