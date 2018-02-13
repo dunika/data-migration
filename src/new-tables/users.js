@@ -21,12 +21,41 @@ const getAccounts = async () => {
 
 }
 
+const getCompaniesAndEmployers = async () => {
+  const users = await getUsers()
+
+  return users.filter(({ role }) => role === 'employer').map(({
+    id: accountId,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    createdAt
+  }) => {
+
+    return {
+      accountId,
+      email,
+      firstName,
+      lastName,
+      jobTitle,
+      location,
+      image,
+      lat,
+      lng, 
+      country,
+      formattedAddress,
+      createdAt,
+    }
+  })
+}
+
 const getJobSeekers = async () => {
   const users = await getUsers()
 
   const resumes = await getResumes()
 
-  return users.filter(({ role }) => role === 'candidate').map(({ id: accountId, firstName, lastName, email, phoneNumber, createdAt }) => {
+  return addId(users.filter(({ role }) => role === 'candidate').map(({ id: accountId, firstName, lastName, email, phoneNumber, createdAt }) => {
     const { 
       jobTitle,
       location,
@@ -51,7 +80,7 @@ const getJobSeekers = async () => {
       formattedAddress,
       createdAt,
     }
-  })
+  }))
 }
 
 const getCvs = async () => {

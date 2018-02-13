@@ -33,7 +33,7 @@ const keyMappings = {
   '_applying_for_job_id':'jobAppliedFor',
   '_resume_file': 'file',
   '_candidate_title':'jobTitle',
-  '_candidate location':'location',
+  '_candidate location':'formattedAddress',
   '_candidate_photo':'image',
 }
 

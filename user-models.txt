@@ -11,15 +11,19 @@
   companyId
   firstName
   lastName
-  email
+  stripId
+  addressLine1
+  addressLine2
+  city
+  county
+  postcode
+  country
   
   JOBSEEKER
   accountId
   firstName
   lastName
-  email
   jobTitle
-  location
   image
   lat 
   lng 
@@ -41,10 +45,8 @@
   twitter
   facebook
   linkedin
-  addressLine1
-  addressLine2
-  city
-  county
-  postcode
+  lat
+  lng
   country
-  phone
+  formattedAddress
+  phoneNumber
