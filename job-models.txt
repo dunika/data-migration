@@ -1,13 +1,15 @@
 JOB
 companyId
+accountId
 regionId
 title
 description
 lat
 lng
-street_address_line_1
-street_address_line_2
+addressLine1
+addressLine2
 city
+slug
 postcode
 country
 countryCode

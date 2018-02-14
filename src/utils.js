@@ -8,6 +8,14 @@ const getTaxonomyIdByName = (data, name) =>  data.find((item) => item.name === n
 
 const buildQuery = (query) => query.replace(/\n/g, '')
 
+const slugify = (text) => text.toString().toLowerCase()
+  .replace(/\s+/g, '-')           
+  .replace(/[^\w\-]+/g, '') 
+  .replace(/\-\-+/g, '-')   
+  .replace(/^-+/, '')       
+  .replace(/-+$/, '');      
+
+
 const getKeys = (data) => data.reduce((results, item) => {
   const entries = Object.entries(item)
   return {

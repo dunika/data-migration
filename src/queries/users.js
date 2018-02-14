@@ -17,8 +17,6 @@ const getUsers = buildQuery(`
     '_company_website',
     '_company_tagline',
     '_company_twitter',
-    'billing_first_name',
-    'billing_last_name',
     'billing_company',
     'billing_email',
     'billing_phone',

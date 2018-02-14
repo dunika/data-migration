@@ -24,30 +24,69 @@ const getAccounts = async () => {
 const getCompaniesAndEmployers = async () => {
   const users = await getUsers()
 
-  return users.filter(({ role }) => role === 'employer').map(({
+  return users.filter(({ role }) => role === 'employer').reduce(({ employers, companies }, {
     id: accountId,
     firstName,
-    lastName,
     email,
     phoneNumber,
+    company,
+    companyWebsite,
+    companyDescription,
+    country,
+    formattedAddress,
+    lat,
+    lng,
+    lastName,
+    companyLogo,
+    companyTwitter,
+    phone,
+    addressLine1,
+    addressLine2,
+    city,
+    county,
+    postcode,
     createdAt
   }) => {
+    const companyId = companies.length + 1
 
     return {
-      accountId,
-      email,
-      firstName,
-      lastName,
-      jobTitle,
-      location,
-      image,
-      lat,
-      lng, 
-      country,
-      formattedAddress,
-      createdAt,
+      companies: [
+        ...companies,
+        ...company ? [{
+          id: companyId,
+          email,
+          name: company,
+          logo: companyLogo,
+          description: companyDescription,
+          website: companyWebsite,
+          twitter: companyTwitter,
+          lat,
+          lng,
+          country,
+          formattedAddress,
+          phone: phoneNumber,
+          createdAt,
+        }] : []
+      ],
+      employers: [
+        ...employers,
+        {
+          id: employers.length + 1,
+          accountId,
+          companyId,
+          firstName,
+          lastName,
+          addressLine1,
+          addressLine2,
+          city,
+          county,
+          postcode,
+          country,
+          createdAt,
+        }
+      ]
     }
-  })
+  }, { employers: [], companies: [] })
 }
 
 const getJobSeekers = async () => {
@@ -110,4 +149,5 @@ module.exports = {
   getCvs,
   getAccounts,
   getJobSeekers,
+  getCompaniesAndEmployers,
 }

@@ -33,9 +33,9 @@ const getJobsToRegion = tableCacher('jobsToRegions', taxonomyQueries.getJobsToRe
   try {
     const regions = await getRegions()
     
-    const jobsToRegionIds = jobsToRegions.map(({ name, ...rest }) => {
+    const jobsToRegionIds = jobsToRegions.map(({ name, ...rest}, index) => {
       const regionId = getTaxonomyIdByName(regions, name)
-      return { regionId, ...rest}
+      return { id: index + 1, regionId, ...rest}
     })
     
     const parentRegions = getParentRegions(regions)  
@@ -68,9 +68,9 @@ const getJobsToCategories = tableCacher('jobsToCategories', taxonomyQueries.getJ
   try {
     const categories = await getCategories()
     
-    return jobsToCategories.map(({ name, ...rest }) => {
+    return jobsToCategories.map(({ name, ...rest }, index) => {
       const categoryId = getTaxonomyIdByName(categories, name)
-      return { categoryId, ...rest}
+      return { id: index + 1, categoryId, ...rest}
     })
 
   } catch (error) {
@@ -89,9 +89,9 @@ const getJobsToTypes = tableCacher('jobsToTypes', taxonomyQueries.getJobsToTypes
   try {
     const types = await getTypes()
     
-    return jobsToTypes.map(({ name, ...rest }) => {
+    return jobsToTypes.map(({ name, ...rest }, index) => {
       const typeId = getTaxonomyIdByName(types, name)
-      return { typeId, ...rest}
+      return { id: index + 1, typeId, ...rest}
     })
 
   } catch (error) {
