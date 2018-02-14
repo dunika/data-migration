@@ -4,7 +4,7 @@ accountId
 regionId
 title
 description
-lat
+lat // location
 lng
 addressLine1
 addressLine2
