@@ -4,13 +4,13 @@ const buildTaxonomyQuery = (key) => buildQuery(`
   SELECT
     DISTINCT terms.name
   FROM 
-    beseen_jalert.wp_9thne3_term_taxonomy tax
+    beseen_jaalert.wp_9thne3_term_taxonomy tax
   LEFT JOIN
-    beseen_jalert.wp_9thne3_terms terms 
+    beseen_jaalert.wp_9thne3_terms terms 
   ON 
     tax.term_id = terms.term_id
   LEFT JOIN
-    beseen_jalert.wp_9thne3_term_relationships relation
+    beseen_jaalert.wp_9thne3_term_relationships relation
   ON tax.term_taxonomy_id = relation.term_taxonomy_id
   WHERE tax.taxonomy = '${key}'
   ORDER BY terms.name;
@@ -20,13 +20,13 @@ const buildJobToTaxonomyQuery = (key) => buildQuery(`
   SELECT
     terms.name, relation.object_id AS jobId
   FROM 
-    beseen_jalert.wp_9thne3_term_taxonomy tax
+    beseen_jaalert.wp_9thne3_term_taxonomy tax
   LEFT JOIN
-    beseen_jalert.wp_9thne3_terms terms 
+    beseen_jaalert.wp_9thne3_terms terms 
   ON 
     tax.term_id = terms.term_id
   LEFT JOIN
-    beseen_jalert.wp_9thne3_term_relationships relation
+    beseen_jaalert.wp_9thne3_term_relationships relation
   ON tax.term_taxonomy_id = relation.term_taxonomy_id
   WHERE tax.taxonomy = '${key}';
 `)

@@ -60,4 +60,5 @@ module.exports = {
   getTaxonomyIdByName,
   tableCacher,
   now,
+  slugify,
 }

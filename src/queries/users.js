@@ -5,9 +5,9 @@ const getUsers = buildQuery(`
     user.ID AS user_id, user.user_pass, user.user_email, user.user_registered,
     meta.meta_key, meta.meta_value
   FROM
-    beseen_jalert.wp_9thne3_users user
+    beseen_jaalert.wp_9thne3_users user
   LEFT JOIN
-    beseen_jalert.wp_9thne3_usermeta meta ON user.ID = meta.user_id
+    beseen_jaalert.wp_9thne3_usermeta meta ON user.ID = meta.user_id
   WHERE meta.meta_key IN( 
     'first_name',
     'last_name',

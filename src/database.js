@@ -8,7 +8,7 @@ const connect = async () => {
       host: 'localhost',
       user: 'root',
       password: 'chachacha100',
-      database: 'beseen_jalert'
+      database: 'beseen_jaalert'
     });
   }
   

@@ -1,19 +1,31 @@
 JOB
-companyId
-accountId
-regionId
+userId
+company
+  name // denormalized
+  id
+region
+  name // denormalized
+  id  
 title
 description
-lat // location
-lng
-addressLine1
-addressLine2
-city
+location / [lng, lat]
+address
+  lineOne
+  lineTwo
+  city
+  county
+  country
+  postcode
+  formatted
+applications
+  userId
+  cvId
+  email
+  firstName
+  lastName
+  coverLetter
+  cvFile
 slug
-postcode
-country
-countryCode
-formattedAddress
 hourlyRateMin
 hourlyRateMax
 salaryMin
@@ -32,11 +44,7 @@ parent - regionId
 CATEGORY
 name - IT, accounting
 
-JOB_CATEGORY
-jobId
-categoryId
-
-TYPE
+JOB_TYPE
 name
   Apprenticeship
   Internship
@@ -47,16 +55,6 @@ name
   Part Time
   Full Time
 
-JOB_TYPE
-jobId
-typeId
 
-APPLICATIONS
-jobId
-userId
-cvId
-email
-firstName
-lastName
-coverLetter
+
 

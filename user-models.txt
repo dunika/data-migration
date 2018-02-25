@@ -5,35 +5,28 @@
   lastLogin
   createdAt
   isActive
-
-  EMPLOYER
-  accountId
+  firstName
+  lastName
+  activeCv
   companyId
-  firstName
-  lastName
   stripId
-  addressLine1
-  addressLine2
-  city
-  county
-  postcode
-  country
-  
-  JOBSEEKER
-  accountId
-  firstName
-  lastName
   jobTitle
   image
-  lat 
-  lng 
-  country
-  formattedAddress
-
-  CV
-  jobseekerId
-  file
-  isActive
+  phoneNumber
+  location / [lng, lat]
+  address
+    lineOne
+    lineTwo
+    city
+    county
+    country
+    postcode
+    formatted
+  cvs[
+    name
+    file
+    isDeleted
+  ]
 
   COMPANY
   email
@@ -45,8 +38,13 @@
   twitter
   facebook
   linkedin
-  lat
-  lng
-  country
-  formattedAddress
   phoneNumber
+  location / [lng, lat]
+  address
+    lineOne
+    lineTwo
+    city
+    county
+    country
+    postcode
+    formatted

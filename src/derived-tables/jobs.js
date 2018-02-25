@@ -21,11 +21,12 @@ const getJobs = async() => {
       ...companyId && { companyId },
       ...rest
     }
-  }).map(({ title, ...data }, index, array) => {
+  }).map(({ title, lat, lng, ...data }, index, array) => {
     const noOfDuplicates = filter(array.slice(0, index),  { title: title }).length
     
     return  {
       ...data,
+      location: { type: 'Point', coordinates: [ lng, lat] },
       title,
       slug: slugify(title) + noOfDuplicates ? '-' + noOfDuplicates : ''
     }

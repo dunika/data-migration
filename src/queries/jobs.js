@@ -5,9 +5,9 @@ const getJobs = buildQuery(`
     job.post_date, job.post_content, job.ID AS job_id, job.post_author, job.post_title,
     meta.meta_key, meta.meta_value
   FROM
-    beseen_jalert.wp_9thne3_posts job 
+    beseen_jaalert.wp_9thne3_posts job 
   LEFT JOIN
-    beseen_jalert.wp_9thne3_postmeta meta ON job.ID = meta.post_id
+    beseen_jaalert.wp_9thne3_postmeta meta ON job.ID = meta.post_id
   WHERE
     job.post_type = "job_listing"
   AND
@@ -24,9 +24,11 @@ const getJobs = buildQuery(`
       '_rate_min',
       '_salary_max',
       '_salary_min',
-      'geolocation_postcode',
+      'geolocation_street',
+      'geolocation_city',
+      'geolocation_state_long',
       'geolocation_country_long',
-      'geolocation_country_short',
+      'geolocation_postcode',
       'geolocation_formatted_address',
       'geolocation_lat',
       'geolocation_long'
@@ -39,9 +41,9 @@ const getApplications = buildQuery(`
     application.post_parent AS job_id, application.ID AS application_id,
     meta.meta_key, meta.meta_value
   FROM
-    beseen_jalert.wp_9thne3_posts application 
+    beseen_jaalert.wp_9thne3_posts application 
   LEFT JOIN
-    beseen_jalert.wp_9thne3_postmeta meta ON application.ID = meta.post_id
+    beseen_jaalert.wp_9thne3_postmeta meta ON application.ID = meta.post_id
   WHERE
     application.post_type = "job_application"
   AND
@@ -61,8 +63,8 @@ const getResumes = buildQuery(`
     post.post_author AS user_id,
     meta.meta_value,
     meta.meta_key
-  FROM beseen_jalert.wp_9thne3_posts post
-  JOIN beseen_jalert.wp_9thne3_postmeta meta
+  FROM beseen_jaalert.wp_9thne3_posts post
+  JOIN beseen_jaalert.wp_9thne3_postmeta meta
     ON meta.post_id = post.id
   WHERE post_type = 'resume'
   AND
@@ -72,10 +74,14 @@ const getResumes = buildQuery(`
       '_candidate_title',
       '_candidate location',
       '_candidate_photo',
-      'goelocation_lat',
-      'goelocation_long',
-      'goelocation_formatted_address',
-      'geolocation_country_long'
+      'geolocation_street',
+      'geolocation_city',
+      'geolocation_state_long',
+      'geolocation_country_long',
+      'geolocation_postcode',
+      'geolocation_formatted_address',
+      'geolocation_lat',
+      'geolocation_long'
     );
 `)
 
