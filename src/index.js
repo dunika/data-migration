@@ -4,7 +4,7 @@ const { resolve } = require('path')
 const { getKeys } = require('./utils')
 // const { getJobs } = require('./tables/jobs')
   
-const { getCompaniesAndUsers } = require('./derived-tables/users')
+const { getUsers } = require('./derived-tables/users')
 const { getJobs } = require('./derived-tables/jobs')
 
 
@@ -15,7 +15,7 @@ const writeJsonToFile = (name, json) => {
 const main = async () => {
   try {
     const jobs = await getJobs()
-    // console.log(jobs);
+    console.log(jobs);
     // console.log(getKeys(lad), 2);
 
     // writeJsonToFile('models', models)

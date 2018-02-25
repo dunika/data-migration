@@ -23,20 +23,16 @@ const getCvs = async () => {
 
 }
 
-const getCompaniesAndUsers = async () => {
-  const users = await getUsers()
+const getUsers = async () => {
+  const { users } = await getUsersAndCompanies()
 
   const cvs = await getCvs()
 
   const resumes = await getResumes()
 
-  return users.slice(0, users.length / 5).reduce(({ accounts, companies }, {
+  return users.slice(0, users.length / 5).map(({
+    companyId,
     city,
-    company,
-    companyDescription,
-    companyLogo,
-    companyTwitter,
-    companyWebsite,
     country,
     county,
     createdAt,
@@ -55,7 +51,8 @@ const getCompaniesAndUsers = async () => {
     phoneNumber,
     postcode,
     role,
-  }, index) => {
+  }) => {
+
     let address = {
       lineOne,
       lineTwo,
@@ -66,7 +63,7 @@ const getCompaniesAndUsers = async () => {
       formatted: formattedAddress,
     };
 
-    let location = [Number(lng), Number(lat)].filter(Boolean);
+    let location = null
 
     let resume = resumes.find(({ userId }) => userId == id)
 
@@ -88,51 +85,83 @@ const getCompaniesAndUsers = async () => {
 
     const userCvs = cvs.filter(({ userId }) => userId == id).map((cv => omit('userId')))
 
-    const companyId = companies.length + 1
+    return {
+      address,
+      ...resume && location.length === 2 && { location },          
+      ...userCvs.length && {
+        cvs: userCvs,
+        activeCv: 1,
+      },
+      companyId,
+      createdAt,
+      email,
+      firstName,
+      id,
+      isActive: true,
+      lastLogin: now,
+      lastName,
+      password,
+      role: role === 'candidate' ? 'jobSeeker' : role,
+    }
+  })
+}
+
+
+const getCompanies = async () => {
+  const { companies } = await getUsersAndCompanies()
+
+  return companies.map(({
+    city,
+    companyId,
+    company,
+    companyDescription,
+    companyLogo,
+    companyTwitter,
+    companyWebsite,
+    country,
+    county,
+    createdAt,
+    email,
+    formattedAddress,
+    id,
+    isActive,
+    lastLogin,
+    lat,
+    lineOne,
+    lineTwo,
+    lng,
+    phoneNumber,
+    postcode,
+  }, index) => {
+    let address = {
+      lineOne,
+      lineTwo,
+      country,
+      county,
+      city,
+      postcode,
+      formatted: formattedAddress,
+    };
+
+    let location = [Number(lng), Number(lat)].filter(Boolean);
     
     return {
-      companies: [
-        ...companies,
-        ...company ? [{
-          id: companyId,
-          email,
-          name: company,
-          logo: companyLogo,
-          description: companyDescription,
-          website: companyWebsite,
-          twitter: companyTwitter,
-          phoneNumber: phoneNumber,
-          address,
-          ...location.length === 2 && { location },
-          createdAt,
-        }] : []
-      ],
-      accounts: [
-        ...accounts,
-        {
-          address,
-          ...resume && location.length === 2 && { location },          
-          ...userCvs.length && {
-            cvs: userCvs,
-            activeCv: 1,
-          },
-          ...company && { company, companyId },
-          createdAt,
-          email,
-          firstName,
-          id,
-          isActive: true,
-          lastLogin: now,
-          lastName,
-          password,
-          role: role === 'candidate' ? 'jobSeeker' : role,
-        }
-      ]
+      id: companyId,
+      email,
+      name: company,
+      logo: companyLogo,
+      description: companyDescription,
+      website: companyWebsite,
+      twitter: companyTwitter,
+      phoneNumber: phoneNumber,
+      address,
+      ...location.length === 2 && { location },
+      createdAt,
     }
-  }, { accounts: [], companies: [] })
+  })
 }
 
 module.exports = {
-  getCompaniesAndUsers,
+  getUsers,
   getCvs,
 }

@@ -1,7 +1,7 @@
 const { filter, find } = require('lodash')
 
 const { getJobs: getOriginalJobs, getApplications: getOriginalApplications } = require('../tables/jobs')
-const { getCvs, getCompaniesAndUsers } = require('./users')
+const { getCvs, getUsers } = require('./users')
 const { now, slugify } = require('../utils')
 
 const getApplications = async() => {
@@ -57,7 +57,7 @@ const getJobs = async() => {
 
   const applications = await getApplications()
 
-  const { accounts, companies } = await getCompaniesAndUsers()
+  const accounts = await getUsers()
 
   return jobs.filter(({ createdAt }) => {
     const createdDate = new Date(createdAt)
@@ -65,7 +65,6 @@ const getJobs = async() => {
     return true || now - ThirtyDays - createdDate < 0 //  TODO: enable when database data ie refreshed
   }).map(({ userId, ...rest }) => {
     const { id, companyId } = find(accounts, { id: userId }) || {}
-    console.log(find(accounts, { id: userId }));
     return {
       userId,
       ...companyId && { companyId },

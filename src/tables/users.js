@@ -1,4 +1,4 @@
-const { values, groupBy, chain, map, merge, camelCase } = require('lodash')
+const { values, groupBy, chain, map, merge, camelCase, pick, find } = require('lodash')
 
 const userQueries = require('../queries/users')
 const keyMappings = require('./key-mappings')
@@ -38,7 +38,7 @@ const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (u
     })
 
     const companies = chain(mappedUser)
-      .filer('company')
+      .filter('company')
       .groupBy('company')
       .values()
       .map((companies) => merge(...companies.map((company, index) => ({
@@ -67,7 +67,7 @@ const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (u
       }))))
       .value()
 
-    const users =  chain(mappedUser)
+    const filteredUsers =  chain(mappedUser)
       .groupBy('id')
       .values()
       .map((users) => merge(...users.map((user, index) => {
@@ -99,7 +99,7 @@ const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (u
       })))
       .value()
 
-      return { users, companies }
+      return { users: filteredUsers, companies }
 
   } catch(error) {
     throw new Error(error)
