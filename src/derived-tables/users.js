@@ -1,7 +1,7 @@
-const { uniqBy, pick, find } = require('lodash')
+const { uniqBy, pick, find, omit } = require('lodash')
 
 const { getApplications, getResumes } = require('../tables/jobs')
-const { getUsers } = require('../tables/users')
+const { getUsersAndCompanies } = require('../tables/users')
 const { addId, now } = require('../utils')
 
 const getCvs = async () => {
@@ -10,18 +10,14 @@ const getCvs = async () => {
 
   const resumeCvs = resumes.map(({ userId, file, id }) => ({ userId, file, id }))
 
-  const activeMap = {}
-
-  return uniqBy(resumeCvs, 'file').map(({ userId, file, ...rest }) => {
+  return uniqBy(resumeCvs, 'file').map(({ userId, file, ...rest }, index) => {
     const cv = {
       userId,
       name: '', // TODO get last bit of file name
       file,
       isDeleted: false,
+      id: index + 1
     }
-
-    activeMap[jobseekerId] = true
-
     return cv;
   })
 
@@ -32,7 +28,9 @@ const getCompaniesAndUsers = async () => {
 
   const cvs = await getCvs()
 
-  return users.reduce(({ users, companies }, {
+  const resumes = await getResumes()
+
+  return users.slice(0, users.length / 5).reduce(({ accounts, companies }, {
     city,
     company,
     companyDescription,
@@ -57,9 +55,7 @@ const getCompaniesAndUsers = async () => {
     phoneNumber,
     postcode,
     role,
-  }) => {
-    const companyId = companies.length + 1
-
+  }, index) => {
     let address = {
       lineOne,
       lineTwo,
@@ -72,7 +68,7 @@ const getCompaniesAndUsers = async () => {
 
     let location = [Number(lng), Number(lat)].filter(Boolean);
 
-    let resume = resumes.find(({ userId }) => userId == accountId)
+    let resume = resumes.find(({ userId }) => userId == id)
 
     if (resume) {
       address = {
@@ -90,6 +86,10 @@ const getCompaniesAndUsers = async () => {
 
     const { jobTitle, image } = resume || {}
 
+    const userCvs = cvs.filter(({ userId }) => userId == id).map((cv => omit('userId')))
+
+    const companyId = companies.length + 1
+    
     return {
       companies: [
         ...companies,
@@ -103,16 +103,20 @@ const getCompaniesAndUsers = async () => {
           twitter: companyTwitter,
           phoneNumber: phoneNumber,
           address,
-          location,
+          ...location.length === 2 && { location },
           createdAt,
         }] : []
       ],
-      users: [
-        ...users,
+      accounts: [
+        ...accounts,
         {
           address,
-          cvs: cvs.filter(({ userId }) => id),
-          ...company && { companyId },
+          ...resume && location.length === 2 && { location },          
+          ...userCvs.length && {
+            cvs: userCvs,
+            activeCv: 1,
+          },
+          ...company && { company, companyId },
           createdAt,
           email,
           firstName,
@@ -125,9 +129,10 @@ const getCompaniesAndUsers = async () => {
         }
       ]
     }
-  }, { users: [], companies: [] })
+  }, { accounts: [], companies: [] })
 }
 
 module.exports = {
   getCompaniesAndUsers,
+  getCvs,
 }

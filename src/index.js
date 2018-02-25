@@ -4,7 +4,9 @@ const { resolve } = require('path')
 const { getKeys } = require('./utils')
 // const { getJobs } = require('./tables/jobs')
   
+const { getCompaniesAndUsers } = require('./derived-tables/users')
 const { getJobs } = require('./derived-tables/jobs')
+
 
 const writeJsonToFile = (name, json) => {
   writeFileSync(resolve(__dirname, `../data/${name}.json`), JSON.stringify(json, null, 2), 'utf8')
@@ -12,10 +14,11 @@ const writeJsonToFile = (name, json) => {
 
 const main = async () => {
   try {
+    const jobs = await getJobs()
+    // console.log(jobs);
+    // console.log(getKeys(lad), 2);
 
-    const lad = await getJobs()
-    // console.log(lad);
-    console.log(getKeys(lad), 2);
+    // writeJsonToFile('models', models)
     
     // console.log(jobsToRegions);
     // console.log('Getting data');

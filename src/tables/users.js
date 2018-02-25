@@ -5,7 +5,7 @@ const keyMappings = require('./key-mappings')
 const { getApplications } = require('./jobs')
 const { tableCacher } = require('../utils')
 
-const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
+const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (users) => {
   try {      
 
     const mappedUser = users.map(({
@@ -37,11 +37,69 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
       }
     })
 
-    return chain(mappedUser)
+    const companies = chain(mappedUser)
+      .filer('company')
+      .groupBy('company')
+      .values()
+      .map((companies) => merge(...companies.map((company, index) => ({
+        id: index + 1,
+        userId: company.id,
+        ...pick(company, [
+          'email',
+          'company',
+          'companyLogo',
+          'companyDescription',
+          'companyWebsite',
+          'companyTwitter',
+          'phoneNumber',
+          'address',
+          'lineOne',
+          'lineTwo',
+          'country',
+          'county',
+          'city',
+          'postcode',
+          'formattedAddress',
+          'lat',
+          'lng',
+          'createdAt'
+        ])
+      }))))
+      .value()
+
+    const users =  chain(mappedUser)
       .groupBy('id')
       .values()
-      .map((user) => merge(...user))
+      .map((users) => merge(...users.map((user, index) => {
+        const { id: companyId } = find(companies, { userId: user.id }) || {}
+        return {
+          ...companyId && { companyId },
+          ...pick(user, [
+            'city',
+            'country',
+            'county',
+            'createdAt',
+            'email',
+            'firstName',
+            'formattedAddress',
+            'id',
+            'isActive',
+            'lastLogin',
+            'lastName',
+            'lat',
+            'lineOne',
+            'lineTwo',
+            'lng',
+            'password',
+            'phoneNumber',
+            'postcode',
+            'role',
+          ])
+        }
+      })))
       .value()
+
+      return { users, companies }
 
   } catch(error) {
     throw new Error(error)
@@ -49,4 +107,4 @@ const getUsers = tableCacher('users', userQueries.getUsers, async (users) => {
 
 })
 
-module.exports = { getUsers }
+module.exports = { getUsersAndCompanies }
