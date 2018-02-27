@@ -16,6 +16,8 @@ const slugify = (text) => text.toString().toLowerCase()
   .replace(/-+$/, '');      
 
 
+const getObjKeys = (o) => uniq(flatMap(o.map(l => Object.keys(l))))
+
 const getKeys = (data) => data.reduce((results, item) => {
   const entries = Object.entries(item)
   return {

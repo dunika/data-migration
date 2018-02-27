@@ -1,4 +1,4 @@
-const { values, groupBy, chain, map, merge, camelCase, pick, find } = require('lodash')
+const { flatMap, uniq, values, groupBy, chain, map, merge, mergeWith, camelCase, pick, find } = require('lodash')
 
 const userQueries = require('../queries/users')
 const keyMappings = require('./key-mappings')
@@ -37,47 +37,15 @@ const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (u
       }
     })
 
-    const companies = chain(mappedUser)
-      .filter('company')
-      .groupBy('company')
-      .values()
-      .map((companies) => merge(...companies.map((company, index) => ({
-        id: index + 1,
-        userId: company.id,
-        ...pick(company, [
-          'email',
-          'company',
-          'companyLogo',
-          'companyDescription',
-          'companyWebsite',
-          'companyTwitter',
-          'phoneNumber',
-          'address',
-          'lineOne',
-          'lineTwo',
-          'country',
-          'county',
-          'city',
-          'postcode',
-          'formattedAddress',
-          'lat',
-          'lng',
-          'createdAt'
-        ])
-      }))))
-      .value()
-
     const filteredUsers =  chain(mappedUser)
       .groupBy('id')
       .values()
       .map((users) => merge(...users.map((user, index) => {
-        const { id: companyId } = find(companies, { userId: user.id }) || {}
+        const company = user.company ? { name: user.company, logo: user.companyLogo, website: user.website } : null
+
         return {
-          ...companyId && { companyId },
+          ...company && { company },
           ...pick(user, [
-            'city',
-            'country',
-            'county',
             'createdAt',
             'email',
             'firstName',
@@ -86,20 +54,14 @@ const getUsersAndCompanies = tableCacher('users', userQueries.getUsers, async (u
             'isActive',
             'lastLogin',
             'lastName',
-            'lat',
-            'lineOne',
-            'lineTwo',
-            'lng',
             'password',
-            'phoneNumber',
-            'postcode',
             'role',
           ])
         }
       })))
       .value()
 
-      return { users: filteredUsers, companies }
+      return { users: filteredUsers, companies: [] }
 
   } catch(error) {
     throw new Error(error)

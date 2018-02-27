@@ -14,8 +14,7 @@ const writeJsonToFile = (name, json) => {
 
 const main = async () => {
   try {
-    const jobs = await getJobs()
-    console.log(jobs);
+    const jobs = await getUsers()
     // console.log(getKeys(lad), 2);
 
     // writeJsonToFile('models', models)
